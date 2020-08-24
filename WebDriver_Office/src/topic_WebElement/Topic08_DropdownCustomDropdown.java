@@ -9,7 +9,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -18,15 +21,22 @@ import org.w3c.dom.Element;
 
 public class Topic08_DropdownCustomDropdown {
 	WebDriver driver;
+	WebDriverWait waitExplicit;
+	JavascriptExecutor javascript;
+	Select select;
+//	By numberAllItems = By.xpath("//ul[@id ='number-menu']/li");
 	// Delare variable
 		@BeforeClass
 		public void beforeClass() {
 			driver = new FirefoxDriver();
+			waitExplicit = new WebDriverWait(driver, 10);
+			javascript = (JavascriptExecutor) driver;
 			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 			driver.manage().window().maximize();
+			
 					
 		}
-		
+/*		
 		@Test
 		public void TC_03_multiSelectDropdownList() throws InterruptedException {
 			driver.get("https://automationfc.github.io/basic-form/index.html");	
@@ -115,21 +125,82 @@ public class Topic08_DropdownCustomDropdown {
 				System.out.println(text);
 			}
 		}
-	
+*/	
+	/*
 		@Test
-		public void TC_03_customDropdownList() {
+		public void TC_04_JQuery() throws InterruptedException {
 			driver.get("https://jqueryui.com/resources/demos/selectmenu/default.html");
 			
-		
-		}
-		public void selectItemInCustomDropsown(String parentXpath, String allItemXpath, String expectedValueItem) {
-			//Click vào dropdpwn cho xổ hết tất cả giá trị ra
-			WebElement parentDropdown = driver.findElement(By.xpath(parentXpath));
+			//5 - Click vào 5 và Kiểm tra item đã được chọn thành công
+			selectItemInCustomDropdown("//span[@id='number-button']", "//ul[@id ='number-menu']/li", "5");	
+			Assert.assertTrue(isElementDisplayed("//span[@id='number-button']/span[@class='ui-selectmenu-text' and text()='5']"));
+			Thread.sleep(2000);
 			
+			//5 - Click vào 19 và Kiểm tra item đã được chọn thành công
+			selectItemInCustomDropdown("//span[@id='number-button']", "//ul[@id ='number-menu']/li", "19");	
+			Assert.assertTrue(isElementDisplayed("//span[@id='number-button']/span[@class='ui-selectmenu-text' and text()='19']"));
+			Thread.sleep(2000);
+}
+*/
+		@Test
+		public void TC_05_Angular() throws InterruptedException {
+			driver.get("https://ej2.syncfusion.com/angular/demos/?_ga=2.262049992.437420821.1575083417-524628264.1575083417#/material/drop-down-list/data-binding");
+			
+			//5 - Click vào Football và Kiểm tra item đã được chọn thành công
+			selectItemInCustomDropdown("//ejs-dropdownlist[@id='games']", "//ul[@id ='games_options']/li", "Football");	
+			Thread.sleep(2000);
+			
+			//Kiểm tra Football được chọn thành công
+			String expectedValue = getTextJS("#games_hidden > option");
+			System.out.println("Text = " + expectedValue);
+			Assert.assertEquals(expectedValue, "Football");
+			
+			
+}	
+		public void selectItemInCustomDropdown(String parentXpath, String allItemXpath, String expectedValueItem) {
+			// 1 - Click vào thẻ chứa dropspwn để nó xổ ra hết tất cả item
+			driver.findElement(By.xpath(parentXpath)).click();
+			
+			// 2 - Khai báo 1 List WebElement chứa all các items bên trong
+			List <WebElement> allItems = driver.findElements(By.xpath(allItemXpath));
+			
+			//3 - Wail cho tất cả item (List WebElement) được xuất hiện
+			waitExplicit.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(allItemXpath)));
+			
+			System.out.println("Item size = " + allItems.size());
+			
+			//4 - Get text từng item sau đó so sánh vs item mình cần chọn
+			for (WebElement item : allItems) {
+				String actualItem = item.getText();
+				System.out.println("Text = " + actualItem);
+				
+				if (actualItem.equals(expectedValueItem)) {
+					item.click();
+					break;				
+				}
+			}
 			
 			
 		}
 
+		public boolean isElementDisplayed(String xpathLocator) {
+			WebElement element = driver.findElement(By.xpath(xpathLocator));
+			if (element.isDisplayed()) {
+				//System.out.println("Element [" + xpathLocator + "] is displayed");
+				return true;
+			} else {
+				//System.out.println("Element [" + xpathLocator + "] is undisplayed");
+				return false;
+			}
+		}
+		public String getTextElement(String xpathLocator) {
+			WebElement element = driver.findElement(By.xpath(xpathLocator));
+			return element.getText();
+		}
+		public String getTextJS(String locator) {
+			return (String) javascript.executeScript("return document.querySelector('" + locator + "').text");
+
+		}
 		@AfterClass
 		public void afterClass() {
 			driver.quit();
