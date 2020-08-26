@@ -11,9 +11,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,7 +19,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.w3c.dom.Element;
+
 
 public class Topic08_DropdownCustomDropdown {
 	WebDriver driver;
@@ -216,11 +214,24 @@ public class Topic08_DropdownCustomDropdown {
 		Assert.assertTrue(isElementDisplayed(
 						"//div[contains(@class,'search selection')]/div[@class='divider text' and text()='Angola']"));
 		Thread.sleep(2000);
-						
-		
-		
-		
+							
 	}
+	
+	@Test
+	public void TC_08_MultipleSelect() throws InterruptedException {
+		driver.get("http://multiple-select.wenzhixin.net.cn/examples#basic.html");
+		driver.switchTo().frame(0);
+		String[] months = {"January","February","March","June","December"};
+		// 5 - Click vào Elliot và Kiểm tra item đã được chọn thành công
+		selectMultipleInDropdown(".//*[@id='example']/div/div[2]/div/div/button", ".//*[@id='example']/div/div[2]/div/div/div/ul/li", months);		
+		Thread.sleep(2000);
+
+		// Kiểm tra Matt Fu được chọn thành công
+		checkItemSelected(months);
+		Thread.sleep(2000);
+			
+	}
+	
 	public void selectItemInCustomDropdown(String parentXpath, String allItemXpath, String expectedValueItem) {
 		// 1 - Click vào thẻ chứa dropspwn để nó xổ ra hết tất cả item
 		driver.findElement(By.xpath(parentXpath)).click();
@@ -257,6 +268,57 @@ public class Topic08_DropdownCustomDropdown {
 
 
 	}
+	
+	public void selectMultipleInDropdown(String parentXpath, String allItemXpath, String[] expectedValueItem) throws InterruptedException {
+		// 1 - Click vào thẻ chứa dropspwn để nó xổ ra hết tất cả item
+		driver.findElement(By.xpath(parentXpath)).click();
+
+		//2 - Chờ cho tất cả giá trị trong drop down load ra thành công
+		waitExplicit.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(allItemXpath)));
+		
+		// 3 - Khai báo 1 List WebElement chứa all các items bên trong
+		List<WebElement> allItems = driver.findElements(By.xpath(allItemXpath));
+		System.out.println("Tat ca cac phan tu trong dropdown = " + allItems.size());
+		
+		//Duyệt qua hết tất cả các phần tử cho đến khi thỏa mãn điều kiện
+		for(WebElement childElement:allItems) {
+			//"January", "February, "March"
+			for(String item:expectedValueItem) {
+				if(childElement.getText().equals(item)) {
+					childElement.click();
+					List<WebElement> itemSelected = driver.findElements(By.xpath("//li[@class='selected']//input"));
+					System.out.println("Item selected=" + itemSelected.size());
+					if(expectedValueItem.length == itemSelected.size()) {
+						break;
+					}
+				}
+			}
+		}
+			
+			
+		
+	}
+	
+	public boolean checkItemSelected(String[]itemSelectedText) {
+		List<WebElement> itemSelected = driver.findElements(By.xpath("//li[@class='selected']//input"));
+		int numberItemSelected = itemSelected.size();
+		
+		String allItemSelectedText = driver.findElement(By.xpath("//button[@class='ms-choice']/span")).getText();
+		System.out.println("Text da chon=" + allItemSelectedText);
+		
+		if(numberItemSelected <=3 && numberItemSelected > 0) {
+			for(String item : itemSelectedText) {
+				if(allItemSelectedText.contains(item)) {
+					break;
+				}
+				
+			}
+			return true;
+		}else {
+			return driver.findElement(By.xpath("//button[@class='ms-choice']/span[text()='"+ numberItemSelected + "of 12 selected']")).isDisplayed();
+		}
+		
+	}
 
 	public boolean isElementDisplayed(String xpathLocator) {
 		WebElement element = driver.findElement(By.xpath(xpathLocator));
@@ -278,6 +340,7 @@ public class Topic08_DropdownCustomDropdown {
 		return (String) javascript.executeScript("return document.querySelector('" + locator + "').text");
 
 	}
+	
 
 	@AfterClass
 	public void afterClass() {
