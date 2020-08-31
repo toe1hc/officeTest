@@ -1,5 +1,6 @@
 package topic_WebElement;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Alert;
@@ -165,8 +166,7 @@ public class Topic09_ButtonRadioCheckboxAlert {
 		
 	}
 
-	@Test
-	public void TC_08_AuthenticationAlert() throws InterruptedException {
+	public void TC_08_AuthenticationAlertByLink() throws InterruptedException {
 		String username = "admin";
 		String password = "admin";
 		String url="http://the-internet.herokuapp.com/basic_auth";
@@ -178,6 +178,52 @@ public class Topic09_ButtonRadioCheckboxAlert {
 		
 	}
 	
+	public void TC_09_AuthenticationAlertByPass() throws InterruptedException {
+		String username = "admin";
+		String password = "admin";
+		driver.get("http://the-internet.herokuapp.com");
+		
+		WebElement basicAuthenLink = driver.findElement(By.xpath("//a[text()='Basic Auth']"));
+		String url = basicAuthenLink.getAttribute("href");
+		
+		driver.get(getUrlByUsernameAndPasswoed(url, username, password));
+		
+		Assert.assertTrue(driver.findElement(By.xpath("//p[contains(text(),'Congratulations! You must have the proper credentials.')]")).isDisplayed());
+			
+	}
+	
+	@Test
+	public void TC_10_AuthenticationAlertByAutoIT() throws IOException {
+		String username = "admin";
+		String password = "admin";
+		String rootFolder = System.getProperty("user.dir");
+		String firefoxAuthen = rootFolder + "\\autoITScript\\authen_firefox.exe";
+		String chromeAuthen = rootFolder + "\\autoITScript\\authen_chrome.exe";
+		String authenUrl = "http://the-internet.herokuapp.com/basic_auth";
+		
+		if(driver.toString().contains("firefox")) {
+			Runtime.getRuntime().exec(new String[] {firefoxAuthen,username, password});
+		}else if(driver.toString().contains("chrome")) {
+			Runtime.getRuntime().exec(new String[] {chromeAuthen,username, password});
+		}
+		driver.get(authenUrl);
+		Assert.assertTrue(driver.findElement(By.xpath("//h3[text()='Basic Auth']")).isDisplayed());
+		
+	}
+	
+	public String getUrlByUsernameAndPasswoed(String url, String username, String password) {
+		System.out.println("Old Url=" + url);
+		String[] splitUrl = url.split("//");	
+		
+		//http://the-internet.herokuapp.com/basic_auth
+		// 01 - http:
+		// 02 - the-internet.herokuapp.com/basic_auth
+		
+		url = splitUrl[0] + "//" + username + ":" + password + "@" + splitUrl[1];
+		System.out.println("New Url=" + url);			
+		return url;
+	}
+
 	public void statusElementSelected(String locator) {
 		WebElement element = driver.findElement(By.xpath(locator));
 		if (element.isSelected()) {
