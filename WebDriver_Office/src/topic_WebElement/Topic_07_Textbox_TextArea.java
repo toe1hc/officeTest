@@ -12,7 +12,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class Topic07_Textbox_TextArea {
+public class Topic_07_Textbox_TextArea {
 	WebDriver driver;
 	String customerID;
 	String username = "mngr265852";

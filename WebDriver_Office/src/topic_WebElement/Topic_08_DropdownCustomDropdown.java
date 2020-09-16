@@ -21,7 +21,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
-public class Topic08_DropdownCustomDropdown {
+public class Topic_08_DropdownCustomDropdown {
 	WebDriver driver;
 	WebDriverWait waitExplicit;
 	JavascriptExecutor javascript;

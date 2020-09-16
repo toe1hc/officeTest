@@ -20,6 +20,9 @@ public class Topic_11_PopUp_IFrame {
 	@BeforeClass
 	public void beforeClass() {
 		driver = new FirefoxDriver();
+//		FirefoxOptions options = new FirefoxOptions();
+//		options.addArguments("--lang=vi");
+//		driver = new FirefoxDriver(options);
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 	}

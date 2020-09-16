@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
 
 
 
-public class Topic10_Interactions {	
+public class Topic_10_Interactions {	
 	WebDriver driver;
 	Actions action;
 	JavascriptExecutor javascriptExecutor;
