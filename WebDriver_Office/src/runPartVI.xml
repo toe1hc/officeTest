@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Suite" parallel="false">
+	<!-- <test name="Test"> <classes> <class name="testng_framework.Part_VI_Dependencies"/> 
+		</classes> </test> -->
+		
+	 <listeners>
+		<listener class-name="testng_framework.TestNGListener"/>
+	</listeners> 
+	 
+	<test name="Test">
+		<classes>
+			<class name="testng_framework.Part_VII_Listener"/>
+		</classes>
+	</test>
+</suite> 

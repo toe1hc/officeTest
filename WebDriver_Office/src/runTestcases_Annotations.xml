@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Selenium WebDriver API" parallel="false">
+	<test name="TestNG Framework">
+		<classes>
+			<class name="testng_framework.Part_I_Annotations" />
+			<methods>
+				<include name="TC_01" />
+			</methods>
+		</classes>
+
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Selenium WebDriver API" parallel="false">
+	<test name="TestNG Framework">
+		    <groups>
+    	<run>
+    		<include name="user"></include> 
+   		</run>
+    </groups>
+    
+    <classes>
+    	<class name="testng_framework.Part_II_Group"/>
+    </classes>
+
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

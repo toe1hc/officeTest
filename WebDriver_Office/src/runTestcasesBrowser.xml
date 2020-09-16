@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Selenium WebDriver API" parallel="true">
+
+	<test name="Run testcase on CHROME">
+		<parameter name="browser" value="chrome"></parameter>
+		<classes>
+			<class name="testng_framework.Part_IV_DataProvider" />
+		</classes>
+	</test>
+	<test name="Run testcase on FIREFOX">
+		<parameter name="browser" value="firefox"></parameter>
+		<classes>
+			<class name="testng_framework.Part_IV_DataProvider" />
+		</classes>
+	</test>
+</suite>

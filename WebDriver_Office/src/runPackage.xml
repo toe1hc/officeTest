@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Selenium WebDriver API" parallel="false">
+  <test name="TestNG Framework">
+  
+  <!-- 
+   <classes>
+    	<class name="testng_framework.Part_V_Loop"/>
+    </classes>
+    -->
+    <packages>
+    	<parameter name="browser" value="firefox"/>
+    	<package name="testng_framework"/>
+    </packages>
+  </test> 
+</suite>
